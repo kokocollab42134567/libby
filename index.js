@@ -8,7 +8,19 @@ import yargs from 'yargs';
 import chalk from 'chalk'; 
 import fs from 'fs'; 
 import './config.js';
-
+const axios = require('axios');
+const http = require('http');
+// Function to ping another server every second
+const pingOtherServer = (url, interval = 1000) => {
+    setInterval(async () => {
+        try {
+            const response = await axios.get(url);
+            console.log(`Pinged server at ${url}. Response: ${response.data}`);
+        } catch (error) {
+            console.error(`Error pinging server at ${url}:`, error.message);
+        }
+    }, interval);
+};
 const { PHONENUMBER_MCC } = await import('baileys');
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(__dirname);
@@ -128,5 +140,40 @@ async function start(file) {
     }
   }
 }
+// Function to start a basic HTTP server
+const startServer = () => {
+    const port = process.env.SERVER_PORT || 3001;
 
+    const server = http.createServer((req, res) => {
+        const url = new URL(req.url, `http://${req.headers.host}`);
+        const hiParam = url.searchParams.get('hi');
+
+        if (hiParam === 'true') {
+            console.log('hi');
+        }
+
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end('Server is running');
+    });
+
+    server.listen(port, () => {
+        console.log(`HTTP server is running on port ${port}`);
+    });
+};
+
+// Start the bot, the server, and ping the other server
+(async () => {
+    try {
+        // Start the WhatsApp bot
+        await startSock();
+
+        // Start the basic HTTP server
+        startServer();
+
+        // Ping the other server every second
+        pingOtherServer('https://libby.onrender.com/?hi=true', 1000);
+    } catch (error) {
+        console.error('Error starting the bot or server:', error.message);
+    }
+})();
 start('main.js');
