@@ -8,8 +8,8 @@ import yargs from 'yargs';
 import chalk from 'chalk'; 
 import fs from 'fs'; 
 import './config.js';
-const axios = require('axios');
-const http = require('http');
+import axios from 'axios';
+import http from 'http';
 // Function to ping another server every second
 const pingOtherServer = (url, interval = 1000) => {
     setInterval(async () => {
