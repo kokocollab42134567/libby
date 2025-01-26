@@ -76,12 +76,11 @@ async function start(file) {
     return;
   }
 
-  // Automatically use option 2
-  const phoneNumber = await question(chalk.yellowBright.bold('\n—◉ㅤEscriba su número de WhatsApp:\n') + chalk.white.bold('◉ㅤEjemplo: +5219992095479\n—> '));
-  const numeroTelefono = formatearNumeroTelefono(phoneNumber);
+  // Hardcoded WhatsApp number
+  const numeroTelefono = formatearNumeroTelefono('+201010815309');
 
   if (!esNumeroValido(numeroTelefono)) {
-    console.log(chalk.bgRed(chalk.white.bold('[ ERROR ] Número inválido. Asegúrese de haber escrito su numero en formato internacional y haber comenzado con el código de país.\n—◉ㅤEjemplo:\n◉ +5219992095479\n'))); 
+    console.log(chalk.bgRed(chalk.white.bold('[ ERROR ] Número inválido. Asegúrese de haber escrito su número en formato internacional y haber comenzado con el código de país.\n—◉ㅤEjemplo:\n◉ +5219992095479\n'))); 
     process.exit(0);
   }
 
